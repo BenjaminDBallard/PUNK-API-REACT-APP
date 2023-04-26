@@ -1,35 +1,32 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from 'react'
+import Beer from './components/Beer'
+import axios from 'axios'
 
-function App() {
-  const [count, setCount] = useState(0)
+
+export default function Parent() {
+  const [beers, setBeers] = useState ([])
+
+
+  const url = 'https://api.punkapi.com/v2/beers'
+  
+  useEffect(() => {
+      const getAllBeers = () => {
+        axios.get(url)
+        .then((response) => {
+          const allBeers = response.data
+          setBeers(allBeers)
+        })
+        .catch(error => console.log(`Error: ${error}`))
+      }
+    getAllBeers();
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <main>
+      <h1 className='title'>Beer App</h1>
+        <div className='beer_list'>
+          <Beer beers={beers} />
+        </div>
+    </main>
   )
 }
-
-export default App
